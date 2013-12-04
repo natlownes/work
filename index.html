@@ -85,10 +85,21 @@ h1{
 #life .event:hover .time{
 	opacity: .5;
 }
+a#audiotoggle {
+  cursor: pointer;
+}
 </style>
 <header>
-	<h1 id="title">Life</h1>
-	<a href="https://github.com/cheeaun/life">Fork me</a>
+  <h1 id="title">
+    Work
+  </h1>
+  <h1>
+    <a id="audiotoggle">Play "Work" by Gangstarr</a>
+  </h1>
+  <audio id="gangstarr">
+    <source src="https://dl.dropboxusercontent.com/u/31982598/gangstarr_-_work.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
 </header>
 <div id="life"></div>
 <script>
@@ -105,10 +116,27 @@ h1{
 				life.fetch(function(response){
 					var data = life.parse(response);
 					var title = life.parseTitle(response);
+          life.addListeners()
 					life.render(title, data);
 				});
 			});
 		},
+    addListeners: function(){
+      var audioElement = document.getElementById('gangstarr');
+      var control      = document.getElementById('audiotoggle');
+      var playing      = false;
+
+      control.addEventListener('click', function(){
+        if ( playing === false ) {
+          playing = true;
+          audioElement.play()
+        } else {
+          playing = false;
+          audioElement.pause()
+        }
+      });
+
+    },
 		loadConfig: function(fn){
 			var xhr = new XMLHttpRequest();
 			xhr.open('GET', 'config.json', true);
@@ -246,7 +274,7 @@ h1{
 
 			for (var y=firstYear, age = 0; y<=nowYear+1; y++, age++){
 				html += '<section class="year" style="left: ' + (days*dayLength) + 'px">' +
-					y + ' (' + age + ')' +
+					y +
 					'</section>';
 				days += (y % 4 == 0) ? 366 : 365;
 			}
